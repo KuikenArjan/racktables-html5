@@ -1071,7 +1071,13 @@ function renderObjectPortRow ($port, $is_highlighted)
 	{
 		$links = $port['links'];
 		echo '<td class=tdleft>'.formatLoggedSpan ($links[0]['last_log'], formatPortLink ($links[0]['remote_object_id'], $links[0]['remote_object_name'], $links[0]['remote_id'], NULL)).'</td>';
-		echo '<td class=tdleft>'.formatLoggedSpan ($links[0]['last_log'], $links[0]['remote_name'], 'underline').'</td>';
+		echo '<td class=tdleft>'.formatLoggedSpan ($links[0]['last_log'], $links[0]['remote_name'], 'underline').'&nbsp;';
+		$helper_args = array ('port' => $port['id']);
+		$popup_args = 'height=700, width=700, location=no, menubar=no, resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no';
+		echo "<span onclick='window.open(\"" . makeHrefForHelper ('traceroute', $helper_args);
+		echo "\",\"findlink\",\"${popup_args}\");'>";
+		printImageHREF ('find', 'Trace this port');
+		echo '</span></td>';
 		$editable = permitted ('object', 'ports', 'editPort')? 'editable' : '';
 		echo "<td class=tdleft><span class='rsvtext $editable id-".$links[0]['link_id']." op-upd-reservation-cable'>".$links[0]['cableid'].'</span></td>';
 		// display other links, if any
@@ -1481,11 +1487,7 @@ function renderPortsForObject ($object_id)
 			$links = $port['links'];
 			echo "<input type=hidden name=reservation_comment value=''>";
 			echo "<input type=hidden name=link_id value='".$links[0]['link_id']."'>";
-			echo '<td class=tdleft>' .
-				formatLoggedSpan ($port['last_log'], formatPortLink ($links[0]['remote_object_id'], $links[0]['remote_object_name'], $links[0]['remote_id'], NULL)) .
-				'</td>';
-
-
+			echo '<td class=tdleft>'.formatLoggedSpan ($port['last_log'], formatPortLink ($links[0]['remote_object_id'], $links[0]['remote_object_name'], $links[0]['remote_id'], NULL)).'</td>';
 			echo '<td class=tdleft>'.formatLoggedSpan ($port['last_log'], $links[0]['remote_name'], 'underline').'&nbsp;';
 			$helper_args = array ('port' => $port['id']);
 			$popup_args = 'height=700, width=700, location=no, menubar=no, resizable=yes, scrollbars=yes, status=no, titlebar=no, toolbar=no';
@@ -1493,7 +1495,6 @@ function renderPortsForObject ($object_id)
 			echo "\",\"findlink\",\"${popup_args}\");'>";
 			printImageHREF ('find', 'Trace this port');
 			echo '</span></td>';
-
 
 			echo "<td><input type=text name=cable value='".$links[0]['cableid']."'></td>";
 			echo '<td class=tdcenter><span';
